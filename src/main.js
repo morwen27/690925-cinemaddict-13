@@ -1,9 +1,9 @@
-import {user} from './view/user.js';
-import {menu} from './view/menu.js';
-import {filmListSection} from './view/film.js';
-import {film} from './view/film.js';
-import {showMoreButton} from './view/show-more-button.js';
-import {popup} from './view/popup.js';
+import { user } from './view/user.js';
+import { menu } from './view/menu.js';
+import { filmListSection } from './view/film.js';
+import { film } from './view/film.js';
+import { showMoreButton } from './view/show-more-button.js';
+import { popup } from './view/popup.js';
 
 const FILMS_IN_LIST = 5;
 const TOP_RATED_FILMS = 2;
@@ -25,7 +25,7 @@ render(mainContainer, filmListSection(), 'beforeend');
 
 const filmListContainer = document.querySelector('.films-list > .films-list__container');
 const topRatedContainer = document.querySelector('.films-list + .films-list--extra .films-list__container');
-const mostCommentedContainer = document.querySelector('.films-list--extra + .films-list--extra .films-list__container'); 
+const mostCommentedContainer = document.querySelector('.films-list--extra + .films-list--extra .films-list__container');
 
 
 for (let i = 0; i < FILMS_IN_LIST; i++) {
