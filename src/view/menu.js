@@ -55,4 +55,4 @@ export const menu = () => {
     </div>
 
   </section>`;
-}
+};

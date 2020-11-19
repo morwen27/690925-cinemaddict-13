@@ -168,4 +168,4 @@ export const popup = () => {
       </div>
     </form>
   </section>`;
-}
+};

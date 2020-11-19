@@ -15,4 +15,4 @@ export const filmList = () => {
       <div class="films-list__container"></div>
     </section>
   </section>`;
-}  
+};
