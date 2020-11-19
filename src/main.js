@@ -1,7 +1,7 @@
-import { user } from './view/user.js';
+import { profile } from './view/profile.js';
 import { menu } from './view/menu.js';
-import { filmListSection } from './view/film.js';
-import { film } from './view/film.js';
+import { filmList } from './view/film-list.js';
+import { filmCard } from './view/film-card.js';
 import { showMoreButton } from './view/show-more-button.js';
 import { popup } from './view/popup.js';
 
@@ -18,9 +18,9 @@ const mainContainer = document.querySelector('.main');
 const documentBody = document.querySelector('body');
 
 
-render(header, user(), 'beforeend');
+render(header, profile(), 'beforeend');
 render(mainContainer, menu(), 'afterbegin');
-render(mainContainer, filmListSection(), 'beforeend');
+render(mainContainer, filmList(), 'beforeend');
 
 
 const filmListContainer = document.querySelector('.films-list > .films-list__container');
@@ -29,15 +29,15 @@ const mostCommentedContainer = document.querySelector('.films-list--extra + .fil
 
 
 for (let i = 0; i < FILMS_IN_LIST; i++) {
-    render(filmListContainer, film(), 'afterbegin');
+    render(filmListContainer, filmCard(), 'afterbegin');
 }
 
 for (let i = 0; i < TOP_RATED_FILMS; i++) {
-    render(topRatedContainer, film(), 'beforeend');
+    render(topRatedContainer, filmCard(), 'beforeend');
 }
 
 for (let i = 0; i < MOST_COMMENTED_FILMS; i++) {
-    render(mostCommentedContainer, film(), 'beforeend');
+    render(mostCommentedContainer, filmCard(), 'beforeend');
 }
 
 render(filmListContainer, showMoreButton(), 'afterend');
