@@ -1,5 +1,5 @@
 export const menu = () => {
-    return `<nav class="main-navigation">
+  return `<nav class="main-navigation">
     <div class="main-navigation__items">
       <a href="#all" class="main-navigation__item">All movies</a>
       <a href="#watchlist" class="main-navigation__item">Watchlist <span class="main-navigation__item-count">13</span></a>
