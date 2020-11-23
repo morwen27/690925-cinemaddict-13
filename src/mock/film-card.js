@@ -1,5 +1,5 @@
-import {getRandomInteger} from 'utilites.js';
-import {generateRandomValue} from 'utilites.js';
+import {getRandomInteger} from './utilites.js';
+import {generateRandomValue} from './utilites.js';
 import dayjs from "dayjs";
 
 const titles = [
@@ -75,7 +75,7 @@ Aliquam erat volutpat.
 Nunc fermentum tortor ac porta dapibus.
 In rutrum ac purus sit amet tempus`;
 
-const generateDataRelease = () => {
+const generateDateRelease = () => {
   const maxDaysGap = 365;
   const daysGap = getRandomInteger(-maxDaysGap, maxDaysGap);
 
@@ -115,7 +115,7 @@ export const generateFilmCard = () => {
     screenwriters: generateRandomValue(screenwriters),
     actors: generateRandomValue(actors),
     year: getRandomInteger(1895, 2020),
-    release: generateDataRelease(),
+    release: generateDateRelease(),
     duration: getRandomInteger(0, 3) + `h ` + getRandomInteger(0, 59) + `m`,
     country: generateRandomValue(country),
     genre: generateGenre(),
