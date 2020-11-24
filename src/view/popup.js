@@ -1,9 +1,9 @@
 import dayjs from "dayjs";
 
 export const popup = (film) => {
-  let {country, duration, release, rating, genre, poster, description, comments, title, ageRating, producer, screenwriters, actors} = film;
+  let {country, duration, release, rating, genre, poster, description, comments, title, ageRating, producer, screenwriters, actors, year} = film;
 
-  release = dayjs(release).format(`DD MMMM YYYY`);
+  release = dayjs(release).format(`DD MMMM`) + ` ` + year;
 
   const commentTitle = (comments.length > 1) ? `Comments` : `Comment`;
   const genreTitle = (genre.length > 1) ? `Genres` : `Genre`;

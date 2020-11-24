@@ -51,16 +51,6 @@ const country = [
   `Israel`,
 ];
 
-const genres = [
-  `comedy`,
-  `drama`,
-  `triller`,
-  `horror`,
-  `western`,
-  `sci-fi`,
-  `fantasy`
-];
-
 const ageRatings = [`0+`, `6+`, `12+`, `16+`, `18+`];
 
 const descriptionTemplate = `Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -105,16 +95,29 @@ const generateGenre = () => {
   return randomGenres;
 };
 
+export const genres = [
+  `comedy`,
+  `drama`,
+  `triller`,
+  `horror`,
+  `western`,
+  `sci-fi`,
+  `fantasy`
+];
+
 export const generateFilmCard = () => {
+  const title = generateRandomValue(titles);
+  const year = getRandomInteger(1895, 2020);
+
   return {
-    title: generateRandomValue(titles),
-    originTitle: generateRandomValue(titles),
+    title,
+    originTitle: title,
     poster: `/images/posters/` + generateRandomValue(posters),
     rating: (Math.random() * 10).toFixed(1),
     producer: generateRandomValue(producers),
     screenwriters: generateRandomValue(screenwriters),
     actors: generateRandomValue(actors),
-    year: getRandomInteger(1895, 2020),
+    year,
     release: generateDateRelease(),
     duration: getRandomInteger(0, 3) + `h ` + getRandomInteger(0, 59) + `m`,
     country: generateRandomValue(country),
