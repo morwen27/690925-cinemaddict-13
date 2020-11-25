@@ -1,5 +1,6 @@
 import {getRandomInteger} from './utilites.js';
 import {generateRandomValue} from './utilites.js';
+import {generateRandomArray} from './utilites.js';
 import dayjs from "dayjs";
 
 const titles = [
@@ -43,7 +44,7 @@ const actors = [
   `Matthew McConaughey`,
 ];
 
-const country = [
+const countries = [
   `USA`,
   `South Korea`,
   `France`,
@@ -84,17 +85,6 @@ const generateDescription = () => {
   return randomDescription;
 };
 
-const generateGenre = () => {
-  const quantityGenres = getRandomInteger(1, 3);
-  let randomGenres = [];
-
-  for (let i = 0; i < quantityGenres; i++) {
-    randomGenres.push(generateRandomValue(genres));
-  }
-
-  return randomGenres;
-};
-
 export const genres = [
   `comedy`,
   `drama`,
@@ -114,14 +104,14 @@ export const generateFilmCard = () => {
     originTitle: title,
     poster: `/images/posters/` + generateRandomValue(posters),
     rating: (Math.random() * 10).toFixed(1),
-    producer: generateRandomValue(producers),
-    screenwriters: generateRandomValue(screenwriters),
-    actors: generateRandomValue(actors),
+    producers: generateRandomArray(producers, 1),
+    screenwriters: generateRandomArray(screenwriters, 3),
+    actors: generateRandomArray(actors, 4),
     year,
     release: generateDateRelease(),
     duration: getRandomInteger(0, 3) + `h ` + getRandomInteger(0, 59) + `m`,
-    country: generateRandomValue(country),
-    genre: generateGenre(),
+    country: generateRandomValue(countries),
+    genre: generateRandomArray(genres, 3),
     description: generateDescription(),
     comments: getRandomInteger(0, 5),
     ageRating: generateRandomValue(ageRatings),

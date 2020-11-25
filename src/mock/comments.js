@@ -18,7 +18,7 @@ const generateDate = () => {
   return dayjs().add(daysGap, `day`).toDate();
 };
 
-export const genetareComment = () => {
+export const generateComment = () => {
   return {
     message: `this is a comment`,
     emoji: generateRandomValue(generateEmoji),

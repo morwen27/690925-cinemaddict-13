@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 
-export const aComment = (comment) => {
+export const createComment = (comment) => {
   let {message, emoji, author, date} = comment;
 
   date = dayjs(date).format(`YYYY/MM/D H:mm`);

@@ -1,5 +1,6 @@
-export const menu = (filterTemplate) => {
+export const menu = (filterTemplate, profileInfo) => {
   const {watchlist, history, favorites, totalDurationHours, totalDurationMinutes, favoriteGenre} = filterTemplate;
+  const {rank} = profileInfo;
 
   return `<nav class="main-navigation">
     <div class="main-navigation__items">
@@ -15,7 +16,7 @@ export const menu = (filterTemplate) => {
     <p class="statistic__rank">
       Your rank
       <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-      <span class="statistic__rank-label"></span>
+      <span class="statistic__rank-label">${rank}</span>
     </p>
 
     <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
