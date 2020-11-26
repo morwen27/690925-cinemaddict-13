@@ -1,9 +1,16 @@
 import dayjs from "dayjs";
+import {generateStringFromArray} from '../mock/utilites.js';
+import {generateMarkUpFromArray} from '../mock/utilites.js';
 
 export const popup = (film) => {
-  let {country, duration, release, rating, genre, poster, description, comments, title, ageRating, producer, screenwriters, actors, year} = film;
+  let {country, duration, release, rating, genre, poster, description, comments, title, ageRating, producers, screenwriters, actors, year} = film;
 
-  release = dayjs(release).format(`DD MMMM`) + ` ` + year;
+  const releaseDate = dayjs(release).format(`DD MMMM`) + ` ` + year;
+  const genres = generateMarkUpFromArray(genre, `span`, `film-details__genre`);
+
+  producers = generateStringFromArray(producers, `, `);
+  screenwriters = generateStringFromArray(screenwriters, `, `);
+  actors = generateStringFromArray(actors, `, `);
 
   const commentTitle = (comments.length > 1) ? `Comments` : `Comment`;
   const genreTitle = (genre.length > 1) ? `Genres` : `Genre`;
@@ -35,7 +42,7 @@ export const popup = (film) => {
             <table class="film-details__table">
               <tr class="film-details__row">
                 <td class="film-details__term">Director</td>
-                <td class="film-details__cell">${producer}</td>
+                <td class="film-details__cell">${producers}</td>
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Writers</td>
@@ -47,7 +54,7 @@ export const popup = (film) => {
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Release Date</td>
-                <td class="film-details__cell">${release}</td>
+                <td class="film-details__cell">${releaseDate}</td>
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Runtime</td>
@@ -59,11 +66,7 @@ export const popup = (film) => {
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">${genreTitle}</td>
-                <td class="film-details__cell">
-                  <span class="film-details__genre">${genre[0]}</span>
-                  <span class="film-details__genre">${genre[1]}</span>
-                  <span class="film-details__genre">${genre[2]}</span>
-                </td>
+                <td class="film-details__cell">${genres}</td>
               </tr>
             </table>
 

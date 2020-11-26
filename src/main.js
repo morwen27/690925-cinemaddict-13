@@ -5,8 +5,8 @@ import {filmList} from './view/film-list.js';
 import {filmCard} from './view/film-card.js';
 import {showMoreButton} from './view/show-more-button.js';
 import {popup} from './view/popup.js';
-import {aComment} from './view/comment.js';
-import {genetareComment} from './mock/comments.js';
+import {createComment} from './view/comment.js';
+import {generateComment} from './mock/comments.js';
 import {generateFilmCard} from './mock/film-card.js';
 import {generateRank} from './mock/profile.js';
 import {generateFilter} from './mock/filter.js';
@@ -20,7 +20,7 @@ const MOST_COMMENTED_FILMS = 2;
 const MAX_QUANTITY_COMMENTS = 5;
 
 const films = new Array(FILMS_IN_LIST_TOTAL).fill().map(generateFilmCard);
-const comments = new Array(MAX_QUANTITY_COMMENTS).fill().map(genetareComment);
+const comments = new Array(MAX_QUANTITY_COMMENTS).fill().map(generateComment);
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -31,7 +31,7 @@ const mainContainer = document.querySelector(`.main`);
 const documentBody = document.querySelector(`body`);
 
 render(header, profile(generateRank()), `beforeend`);
-render(mainContainer, menu(generateFilter()), `afterbegin`);
+render(mainContainer, menu(generateFilter(), generateRank()), `afterbegin`);
 render(mainContainer, filmList(), `beforeend`);
 render(mainContainer, footer(), `afterend`);
 
@@ -77,7 +77,7 @@ render(documentBody, popup(films[0]), `beforeend`);
 const commentList = document.querySelector(`.film-details__comments-list`);
 
 for (let i = 0; i < films[0].comments; i++) {
-  render(commentList, aComment(comments[i]), `beforeend`);
+  render(commentList, createComment(comments[i]), `beforeend`);
 }
 
 const popupSection = documentBody.querySelector(`.film-details`);
