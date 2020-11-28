@@ -1,5 +1,5 @@
-import {getRandomInteger} from './utilites.js';
-import {generateRandomValue} from './utilites.js';
+import {getRandomInteger} from '../utilites.js';
+import {generateRandomValue} from '../utilites.js';
 import dayjs from "dayjs";
 
 
