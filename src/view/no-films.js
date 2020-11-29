@@ -1,16 +1,21 @@
 import {createElement} from '../utilites.js';
 
-export const createShowMoreButtonTemplate = () => {
-  return `<button class="films-list__show-more">Show more</button>`;
+export const createNoFilmsMessageTemplate = () => {
+
+  return `<section class="films">
+  <section class="films-list">
+    <h2 class="films-list__title">There are no movies in our database</h2>
+  </section>
+</section>`;
 };
 
-export default class ShowMoreButton {
+export default class NoFilmsMessage {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return createShowMoreButtonTemplate();
+    return createNoFilmsMessageTemplate();
   }
 
   getElement() {

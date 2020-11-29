@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
+import {createElement} from '../utilites.js';
 
-export const createComment = (comment) => {
+export const createCommentTemplate = (comment) => {
   let {message, emoji, author, date} = comment;
 
   date = dayjs(date).format(`YYYY/MM/D H:mm`);
@@ -19,3 +20,26 @@ export const createComment = (comment) => {
   </div>
 </li>`;
 };
+
+export default class Comment {
+  constructor(comment) {
+    this._element = null;
+    this._comment = comment;
+  }
+
+  getTemplate() {
+    return createCommentTemplate(this._comment);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

@@ -1,9 +1,21 @@
 import dayjs from "dayjs";
-import {generateStringFromArray} from '../mock/utilites.js';
-import {generateMarkUpFromArray} from '../mock/utilites.js';
+import {generateStringFromArray} from '../utilites.js';
+import {createElement} from '../utilites.js';
 
-export const popup = (film) => {
+export const createPopupTemplate = (film) => {
   let {country, duration, release, rating, genre, poster, description, comments, title, ageRating, producers, screenwriters, actors, year} = film;
+
+  const generateMarkUpFromArray = (array, tag, tagsClass) => {
+    let arrayElement = ``;
+    let markUpString = ``;
+
+    for (let i = 0; i < array.length; i++) {
+      arrayElement = array[i];
+      markUpString += `<` + tag + ` class="` + tagsClass + `">` + arrayElement + `</` + tag + `>`;
+    }
+
+    return markUpString;
+  };
 
   const releaseDate = dayjs(release).format(`DD MMMM`) + ` ` + year;
   const genres = generateMarkUpFromArray(genre, `span`, `film-details__genre`);
@@ -129,3 +141,26 @@ export const popup = (film) => {
     </form>
   </section>`;
 };
+
+export default class Popup {
+  constructor(film) {
+    this._element = null;
+    this._film = film;
+  }
+
+  getTemplate() {
+    return createPopupTemplate(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
