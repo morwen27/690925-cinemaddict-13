@@ -1,7 +1,12 @@
 import {createElement} from '../utilites.js';
+import {FILMS_IN_LIST_TOTAL} from '../main.js';
 
 export const createFooterTemplate = () => {
-  const totalFilmsQuantity = 432262;
+  let totalFilmsQuantity = 432262;
+
+  if (FILMS_IN_LIST_TOTAL === 0) {
+    totalFilmsQuantity = 0;
+  }
 
   return `<footer class="footer">
   <section class="footer__logo logo logo--smaller">Cinemaddict</section>
