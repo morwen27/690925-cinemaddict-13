@@ -1,4 +1,4 @@
-import {getRandomInteger} from './utilites.js';
+import {getRandomInteger} from '../utilites.js';
 
 const deteminateRank = () => {
   const watchedFilms = getRandomInteger(0, 100);
