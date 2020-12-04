@@ -1,3 +1,5 @@
+import {FILMS_IN_LIST_TOTAL} from '../src/constants.js';
+
 import {render, renderPosition} from './utilites.js';
 
 import Profile from './view/profile.js';
@@ -16,7 +18,6 @@ import {generateFilmCard} from './mock/film-card.js';
 import {generateRank} from './mock/profile.js';
 import {generateFilter} from './mock/filter.js';
 
-export const FILMS_IN_LIST_TOTAL = 20;
 const FILMS_PER_STEP = 5;
 
 const TOP_RATED_FILMS = 2;
@@ -46,18 +47,22 @@ const createPopup = (film) => {
     document.body.classList.remove(`hide-overflow`);
   };
 
+  const closePopupEscHandler = (evt) => {
+    evt.preventDefault();
+
+    if (evt.key === `Escape` || evt.key === `Esc`) {
+      closePopup();
+      document.removeEventListener(`keydown`, closePopupEscHandler);
+    }
+  };
+
   closePopupButton.addEventListener(`click`, (evt) => {
     evt.preventDefault();
 
     closePopup();
   });
-  document.addEventListener(`keydown`, (evt) => {
-    evt.preventDefault();
 
-    if (evt.key === `Escape` || evt.key === `Esc`) {
-      closePopup();
-    }
-  });
+  document.addEventListener(`keydown`, closePopupEscHandler);
 };
 
 const hangEvents = (filmComponent, filmData) => {

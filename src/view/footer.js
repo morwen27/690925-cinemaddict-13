@@ -1,5 +1,5 @@
 import {createElement} from '../utilites.js';
-import {FILMS_IN_LIST_TOTAL} from '../main.js';
+import {FILMS_IN_LIST_TOTAL} from '../constants.js';
 
 export const createFooterTemplate = () => {
   let totalFilmsQuantity = 432262;
