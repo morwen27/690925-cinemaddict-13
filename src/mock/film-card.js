@@ -1,6 +1,4 @@
-import {getRandomInteger} from '../utilites.js';
-import {generateRandomValue} from '../utilites.js';
-import {generateRandomArray} from '../utilites.js';
+import {getRandomInteger, generateRandomValue, generateRandomArray} from '../utils/common.js';
 import dayjs from "dayjs";
 
 const titles = [

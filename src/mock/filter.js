@@ -1,6 +1,5 @@
 import {genres} from './film-card.js';
-import {getRandomInteger} from '../utilites.js';
-import {generateRandomValue} from '../utilites.js';
+import {getRandomInteger, generateRandomValue} from '../utils/common.js';
 
 export const generateFilter = () => {
   const watchedFilms = getRandomInteger(0, 100);

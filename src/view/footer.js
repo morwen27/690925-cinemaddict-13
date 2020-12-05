@@ -1,4 +1,4 @@
-import {createElement} from '../utilites.js';
+import AbstractView from '../abstract.js';
 
 export const createFooterTemplate = () => {
   const totalFilmsQuantity = 432262;
@@ -11,24 +11,8 @@ export const createFooterTemplate = () => {
 </footer>`;
 };
 
-export default class Footer {
-  constructor() {
-    this._element = null;
-  }
-
+export default class Footer extends AbstractView {
   getTemplate() {
     return createFooterTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
