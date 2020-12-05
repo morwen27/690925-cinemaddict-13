@@ -11,6 +11,7 @@ import Comment from './view/comment.js';
 import ShowMoreButton from './view/show-more-button.js';
 import Footer from './view/footer.js';
 import Popup from './view/popup.js';
+import NoFilmsMessage from './view/no-films.js';
 
 import {generateComment} from './mock/comments.js';
 import {generateFilmCard} from './mock/film-card.js';

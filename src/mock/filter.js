@@ -1,9 +1,16 @@
 import {genres} from './film-card.js';
+
 import {getRandomInteger, generateRandomValue} from '../utils/common.js';
+import {FILMS_IN_LIST_TOTAL} from '../constants.js';
 
 export const generateFilter = () => {
-  const watchedFilms = getRandomInteger(0, 100);
-  const favoritesFilms = watchedFilms - getRandomInteger(0, watchedFilms);
+  let watchedFilms = getRandomInteger(0, 100);
+  let favoritesFilms = watchedFilms - getRandomInteger(0, watchedFilms);
+
+  if (FILMS_IN_LIST_TOTAL === 0) {
+    watchedFilms = 0;
+    favoritesFilms = 0;
+  }
 
   let totalDuration = null;
   for (let i = 0; i < watchedFilms; i++) {
