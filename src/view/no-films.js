@@ -1,4 +1,4 @@
-import {createElement} from '../utilites.js';
+import AbstractView from '../abstract.js';
 
 export const createNoFilmsMessageTemplate = () => {
 
@@ -9,24 +9,8 @@ export const createNoFilmsMessageTemplate = () => {
 </section>`;
 };
 
-export default class NoFilmsMessage {
-  constructor() {
-    this._element = null;
-  }
-
+export default class NoFilmsMessage extends AbstractView {
   getTemplate() {
     return createNoFilmsMessageTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
