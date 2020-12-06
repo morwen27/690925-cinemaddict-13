@@ -1,7 +1,5 @@
 import {FILMS_IN_LIST_TOTAL} from '../constants.js';
 import AbstractView from '../abstract.js';
-import {FILMS_IN_LIST_TOTAL} from '../constants.js';
-
 
 export const createFooterTemplate = () => {
   let totalFilmsQuantity = 432262;
