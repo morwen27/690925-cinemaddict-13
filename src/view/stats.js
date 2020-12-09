@@ -1,4 +1,4 @@
-import {createElement} from '../utilites.js';
+import AbstractView from '../abstract.js';
 
 export const createStatisticTemplate = (filterTemplate, profileInfo) => {
 
@@ -44,26 +44,14 @@ export const createStatisticTemplate = (filterTemplate, profileInfo) => {
   </section>`;
 };
 
-export default class Statistic {
+export default class Statistic extends AbstractView {
   constructor(filter, profile) {
-    this._element = null;
+    super();
     this._filter = filter;
     this._profile = profile;
   }
 
   getTemplate() {
     return createStatisticTemplate(this._filter, this._profile);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

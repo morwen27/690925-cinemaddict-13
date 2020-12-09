@@ -1,5 +1,5 @@
+import AbstractView from '../abstract.js';
 import dayjs from "dayjs";
-import {createElement} from '../utilites.js';
 
 export const createCommentTemplate = (comment) => {
   let {message, emoji, author, date} = comment;
@@ -21,25 +21,13 @@ export const createCommentTemplate = (comment) => {
 </li>`;
 };
 
-export default class Comment {
+export default class Comment extends AbstractView {
   constructor(comment) {
-    this._element = null;
+    super();
     this._comment = comment;
   }
 
   getTemplate() {
     return createCommentTemplate(this._comment);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

@@ -30,34 +30,3 @@ export const generateStringFromArray = (array, separator) => {
 
   return stringValue;
 };
-
-export const renderTemplate = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
-};
-
-export const renderPosition = {
-  AFTERBEGIN: `afterbegin`,
-  BEFOREEND: `beforeend`,
-  AFTEREND: `afterend`,
-};
-
-export const render = (container, element, place) => {
-  switch (place) {
-    case renderPosition.AFTERBEGIN:
-      container.prepend(element);
-      break;
-    case renderPosition.BEFOREEND:
-      container.append(element);
-      break;
-    case renderPosition.AFTEREND:
-      container.after(element);
-      break;
-  }
-};
-
-export const createElement = (template) => {
-  const newElement = document.createElement(`div`);
-  newElement.innerHTML = template;
-
-  return newElement.firstChild;
-};
