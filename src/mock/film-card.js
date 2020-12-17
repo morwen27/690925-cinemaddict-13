@@ -1,6 +1,8 @@
 import {getRandomInteger, generateRandomValue, generateRandomArray} from '../utils/common.js';
 import dayjs from "dayjs";
 
+const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
+
 const titles = [
   `Made for each other`,
   `Popeye meets Sinbad`,
@@ -98,6 +100,7 @@ export const generateFilmCard = () => {
   const year = getRandomInteger(1895, 2020);
 
   return {
+    id: generateId(),
     title,
     originTitle: title,
     poster: `/images/posters/` + generateRandomValue(posters),
@@ -113,6 +116,9 @@ export const generateFilmCard = () => {
     description: generateDescription(),
     comments: getRandomInteger(0, 5),
     ageRating: generateRandomValue(ageRatings),
+    isFavorite: false,
+    isAlreadyWatched: false,
+    isInWatchList: false,
   };
 };
 
