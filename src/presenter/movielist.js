@@ -11,6 +11,7 @@ import Comment from '../view/comment.js';
 
 import {render, renderPosition, remove, replace} from '../utils/render.js';
 import {updateItem} from "../utils/common.js";
+import FilmCard from '../view/film-card.js';
 
 
 export default class MovieList {
@@ -29,7 +30,10 @@ export default class MovieList {
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
     this._handleCreatePopup = this._handleCreatePopup.bind(this);
     this._handleFilmComponentChange = this._handleFilmComponentChange.bind(this);
+
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
+    this._handleToWatchlistClick = this._handleToWatchlistClick.bind(this);
+    this._handleAlreadyWatchedClick = this._handleAlreadyWatchedClick.bind(this);
   }
 
   init(films) {
@@ -47,23 +51,12 @@ export default class MovieList {
   }
 
   _renderFilm(film, container) {
-
-    const prevFilmComponent = null;
-
     this._filmCardComponent = new FilmCardView(film);
-    this._addListeners(this._filmCardComponent);
+    this._addListenersForComponent(this._filmCardComponent);
+
     this._allFilms[film.id] = this._filmCardComponent;
 
-    if (prevFilmComponent === null) {
-      render(container, this._filmCardComponent, renderPosition.BEFOREEND);
-      return;
-    }
-
-    if (container.getElement().contains(prevFilmComponent.getElement())) {
-      replace(this._filmCardComponent, prevFilmComponent);
-    }
-
-    remove(prevFilmComponent);
+    render(container, this._filmCardComponent, renderPosition.BEFOREEND);
   }
 
   _renderFilms(from, to, container) {
@@ -94,9 +87,35 @@ export default class MovieList {
     this._renderFilms(0, MOST_COMMENTED_FILMS, this._mostCommentedContainer);
   }
 
-  _addListeners(film) {
+  _addListenersForComponent(film) {
     film.setOpenPopupClickHandler(this._handleCreatePopup);
     film.setFavoriteClickHandler(this._handleFavoriteClick);
+    film.setToWatchlistClickHandler(this._handleToWatchlistClick);
+    film.setAlreadyWatchedClickHandler(this._handleAlreadyWatchedClick);
+  }
+
+  _listenersForPopup(popup) {
+    popup.setFavoriteClickHandler(this._handleFavoriteClick);
+    popup.setToWatchlistClickHandler(this._handleToWatchlistClick);
+    popup.setAlreadyWatchedClickHandler(this._handleAlreadyWatchedClick);
+
+    const closePopup = () => {
+      remove(popup);
+      document.body.classList.remove(`hide-overflow`);
+    };
+
+    popup.setClosePopupClickHandler(closePopup);
+
+    const closePopupEscHandler = (evt) => {
+      evt.preventDefault();
+
+      if (evt.key === `Escape` || evt.key === `Esc`) {
+        closePopup();
+        document.removeEventListener(`keydown`, closePopupEscHandler);
+      }
+    };
+
+    document.addEventListener(`keydown`, closePopupEscHandler);
   }
 
   _destroyComponent() {
@@ -113,18 +132,14 @@ export default class MovieList {
     remove(this._showMoreButtonComponent);
   }
 
-  _findParent(film) {
-    const targetComponent = film.getElement();
+  _updateFilmComponent(film) {
+    const updatedFilm = new FilmCard(film);
+    this._addListenersForComponent(updatedFilm);
 
-    if (this._filmListContainer.contains(targetComponent)) {
-      return this._filmListContainer;
-    }
-    if (this._topRatedContainer.contains(targetComponent)) {
-      return this._topRatedContainer;
-    }
-    if (this._mostCommentedContainer.contains(targetComponent)) {
-      return this._mostCommentedContainer;
-    }
+    replace(updatedFilm, this._allFilms[film.id]);
+    remove(this._allFilms[film.id]);
+
+    this._allFilms[film.id] = updatedFilm;
   }
 
   _handleShowMoreButtonClick() {
@@ -148,35 +163,24 @@ export default class MovieList {
       render(commentList, new Comment(this.commentsData[i]), renderPosition.BEFOREEND);
     }
 
-    const closePopup = () => {
-      remove(this._popup);
-      document.body.classList.remove(`hide-overflow`);
-    };
-
-    this._popup.setClosePopupClickHandler(closePopup);
-
-    const closePopupEscHandler = (evt) => {
-      evt.preventDefault();
-
-      if (evt.key === `Escape` || evt.key === `Esc`) {
-        closePopup();
-        document.removeEventListener(`keydown`, closePopupEscHandler);
-      }
-    };
-
-    document.addEventListener(`keydown`, closePopupEscHandler);
+    this._listenersForPopup(this._popup);
   }
 
   _handleFilmComponentChange(updatedFilm) {
-    const parent = this._findParent(this._allFilms[updatedFilm.id]);
-
     this._films = updateItem(this._films, updatedFilm);
-    this._renderFilm(updatedFilm, parent);
+    this._updateFilmComponent(updatedFilm);
   }
 
   _handleFavoriteClick(film) {
     this._handleFilmComponentChange(Object.assign({}, film, {isFavorite: !film.isFavorite}));
   }
 
+  _handleToWatchlistClick(film) {
+    this._handleFilmComponentChange(Object.assign({}, film, {isInWatchList: !film.isInWatchList}));
+  }
+
+  _handleAlreadyWatchedClick(film) {
+    this._handleFilmComponentChange(Object.assign({}, film, {isAlreadyWatched: !film.isAlreadyWatched}));
+  }
 }
 
