@@ -156,7 +156,7 @@ export default class MovieList {
   }
 
   _updateFilmComponent(film) {
-    const updatedFilm = new FilmCard(film);
+    const updatedFilm = new FilmCardView(film);
     this._addListenersForComponent(updatedFilm);
 
     replace(updatedFilm, this._allFilms[film.id]);
