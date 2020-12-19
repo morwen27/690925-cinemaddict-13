@@ -5,21 +5,19 @@ import {MOST_COMMENTED_FILMS} from '../constants.js';
 import FilmListView from '../view/film-list.js';
 import FilmCardView from '../view/film-card.js';
 import ShowMoreButtonView from '../view/show-more-button.js';
-
 import Popup from '../view/popup.js';
 import Comment from '../view/comment.js';
 
 import {render, renderPosition, remove, replace} from '../utils/render.js';
 import {updateItem} from "../utils/common.js";
-import FilmCard from '../view/film-card.js';
 
+import {comments} from '../mock/generatedDatas.js';
 
 export default class MovieList {
-  constructor(container, comments) {
+  constructor(container) {
     this._mainContainer = container;
-    this.commentsData = comments;
 
-    this.renderedFilms = FILMS_PER_STEP;
+    this._renderedFilmsCount = FILMS_PER_STEP;
 
     this._allFilms = {};
 
@@ -173,10 +171,10 @@ export default class MovieList {
   }
 
   _handleShowMoreButtonClick() {
-    this._renderFilms(this._films, this.renderedFilms, this.renderedFilms + FILMS_PER_STEP, this._filmListContainer);
-    this.renderedFilms += FILMS_PER_STEP;
+    this._renderFilms(this._films, this._renderedFilmsCount, this._renderedFilmsCount + FILMS_PER_STEP, this._filmListContainer);
+    this._renderedFilmsCount += FILMS_PER_STEP;
 
-    if (this.renderedFilms >= this._films.length) {
+    if (this._renderedFilmsCount >= this._films.length) {
       remove(this._showMoreButtonComponent);
     }
   }
@@ -193,9 +191,9 @@ export default class MovieList {
 
     const commentList = this._popup.getElement().querySelector(`.film-details__comments-list`);
 
-    for (let i = 0; i < film.comments; i++) {
-      render(commentList, new Comment(this.commentsData[i]), renderPosition.BEFOREEND);
-    }
+    comments.forEach((item) => {
+      render(commentList, new Comment(item), renderPosition.BEFOREEND);
+    });
 
     this._listenersForPopup(this._popup);
   }

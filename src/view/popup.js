@@ -27,9 +27,9 @@ export const createPopupTemplate = (film) => {
   const commentTitle = (comments.length > 1) ? `Comments` : `Comment`;
   const genreTitle = (genre.length > 1) ? `Genres` : `Genre`;
 
-  isFavorite = (isFavorite) ? `checked` : ``;
-  isInWatchList = (isInWatchList) ? `checked` : ``;
-  isAlreadyWatched = (isAlreadyWatched) ? `checked` : ``;
+  const markFavorite = isFavorite ? `checked` : ``;
+  const markInWatchList = isInWatchList ? `checked` : ``;
+  const markAlreadyWatched = isAlreadyWatched ? `checked` : ``;
 
   return `<section class="film-details">
     <form class="film-details__inner" action="" method="get">
@@ -91,13 +91,13 @@ export const createPopupTemplate = (film) => {
         </div>
 
         <section class="film-details__controls">
-          <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${isInWatchList}>
+          <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${markInWatchList}>
           <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
-          <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${isAlreadyWatched}>
+          <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${markAlreadyWatched}>
           <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
 
-          <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${isFavorite}>
+          <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${markFavorite}>
           <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
         </section>
       </div>

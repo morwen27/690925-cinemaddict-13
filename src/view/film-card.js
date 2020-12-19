@@ -7,9 +7,9 @@ export const createFilmCardTemplate = (film) => {
     description.substring(0, 139) + `(...)`
     : description;
 
-  isFavorite = (isFavorite) ? `film-card__controls-item--active` : ``;
-  isInWatchList = (isInWatchList) ? `film-card__controls-item--active` : ``;
-  isAlreadyWatched = (isAlreadyWatched) ? `film-card__controls-item--active` : ``;
+  const markFavorite = isFavorite ? `film-card__controls-item--active` : ``;
+  const markInWatchList = isInWatchList ? `film-card__controls-item--active` : ``;
+  const markAlreadyWatched = isAlreadyWatched ? `film-card__controls-item--active` : ``;
 
   return `<article class="film-card">
     <h3 class="film-card__title">${title}</h3>
@@ -23,9 +23,9 @@ export const createFilmCardTemplate = (film) => {
     <p class="film-card__description">${description}</p>
     <a class="film-card__comments">${comments} comments</a>
     <div class="film-card__controls">
-      <button class="film-card__controls-item button ${isInWatchList} film-card__controls-item--add-to-watchlist" type="button">Add to watchlist</button>
-      <button class="film-card__controls-item button ${isAlreadyWatched} film-card__controls-item--mark-as-watched" type="button">Mark as watched</button>
-      <button class="film-card__controls-item ${isFavorite} button film-card__controls-item--favorite" type="button">Mark as favorite</button>
+      <button class="film-card__controls-item button ${markInWatchList} film-card__controls-item--add-to-watchlist" type="button">Add to watchlist</button>
+      <button class="film-card__controls-item button ${markAlreadyWatched} film-card__controls-item--mark-as-watched" type="button">Mark as watched</button>
+      <button class="film-card__controls-item ${markFavorite} button film-card__controls-item--favorite" type="button">Mark as favorite</button>
     </div>
   </article>`;
 };
