@@ -59,8 +59,8 @@ export default class MovieList {
     render(container, this._filmCardComponent, renderPosition.BEFOREEND);
   }
 
-  _renderFilms(from, to, container) {
-    this._films
+  _renderFilms(data, from, to, container) {
+    data
       .slice(from, to)
       .forEach((film) => this._renderFilm(film, container));
   }
@@ -72,7 +72,7 @@ export default class MovieList {
   }
 
   _renderFilmList() {
-    this._renderFilms(0, Math.min(this._films.length, FILMS_PER_STEP), this._filmListContainer);
+    this._renderFilms(this._films, 0, Math.min(this._films.length, FILMS_PER_STEP), this._filmListContainer);
 
     if (this._films.length > FILMS_PER_STEP) {
       this._renderShowMoreButton();
@@ -80,11 +80,35 @@ export default class MovieList {
   }
 
   _renderTopRated() {
-    this._renderFilms(0, TOP_RATED_FILMS, this._topRatedContainer);
+    const sortRatingFilm = this._films
+    .slice()
+    .sort((a, b) => {
+      if (a.rating > b.rating) {
+        return -1;
+      }
+      if (a.rating < b.rating) {
+        return 1;
+      }
+      return 0;
+    }
+    );
+    this._renderFilms(sortRatingFilm, 0, TOP_RATED_FILMS, this._topRatedContainer);
   }
 
   _renderMostCommented() {
-    this._renderFilms(0, MOST_COMMENTED_FILMS, this._mostCommentedContainer);
+    const sortCommentedFilm = this._films
+    .slice()
+    .sort((a, b) => {
+      if (a.comments > b.comments) {
+        return -1;
+      }
+      if (a.comments < b.comments) {
+        return 1;
+      }
+      return 0;
+    }
+    );
+    this._renderFilms(sortCommentedFilm, 0, MOST_COMMENTED_FILMS, this._mostCommentedContainer);
   }
 
   _addListenersForComponent(film) {
@@ -101,6 +125,7 @@ export default class MovieList {
 
     const closePopup = () => {
       remove(popup);
+      this._popup = null;
       document.body.classList.remove(`hide-overflow`);
     };
 
@@ -143,7 +168,7 @@ export default class MovieList {
   }
 
   _handleShowMoreButtonClick() {
-    this._renderFilms(this.renderedFilms, this.renderedFilms + FILMS_PER_STEP, this._filmListContainer);
+    this._renderFilms(this._films, this.renderedFilms, this.renderedFilms + FILMS_PER_STEP, this._filmListContainer);
     this.renderedFilms += FILMS_PER_STEP;
 
     if (this.renderedFilms >= this._films.length) {
@@ -152,6 +177,10 @@ export default class MovieList {
   }
 
   _handleCreatePopup(film) {
+    if (this._popup !== null) {
+      remove(this._popup);
+    }
+
     this._popup = new Popup(film);
 
     render(this._mainContainer.parentElement, this._popup, renderPosition.BEFOREEND);
@@ -169,6 +198,11 @@ export default class MovieList {
   _handleFilmComponentChange(updatedFilm) {
     this._films = updateItem(this._films, updatedFilm);
     this._updateFilmComponent(updatedFilm);
+
+    if (this._popup !== null) {
+      remove(this._popup);
+      this._handleCreatePopup(updatedFilm);
+    }
   }
 
   _handleFavoriteClick(film) {

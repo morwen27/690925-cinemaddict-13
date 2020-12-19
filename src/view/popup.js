@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import {generateStringFromArray} from '../utils/common.js';
 
 export const createPopupTemplate = (film) => {
-  let {country, duration, release, rating, genre, poster, description, comments, title, ageRating, producers, screenwriters, actors, year} = film;
+  let {country, duration, release, rating, genre, poster, description, comments, title, ageRating, producers, screenwriters, actors, year, isFavorite, isInWatchList, isAlreadyWatched} = film;
 
   const generateMarkUpFromArray = (array, tag, tagsClass) => {
     let arrayElement = ``;
@@ -26,6 +26,10 @@ export const createPopupTemplate = (film) => {
 
   const commentTitle = (comments.length > 1) ? `Comments` : `Comment`;
   const genreTitle = (genre.length > 1) ? `Genres` : `Genre`;
+
+  isFavorite = (isFavorite) ? `checked` : ``;
+  isInWatchList = (isInWatchList) ? `checked` : ``;
+  isAlreadyWatched = (isAlreadyWatched) ? `checked` : ``;
 
   return `<section class="film-details">
     <form class="film-details__inner" action="" method="get">
@@ -87,13 +91,13 @@ export const createPopupTemplate = (film) => {
         </div>
 
         <section class="film-details__controls">
-          <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
+          <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${isInWatchList}>
           <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
-          <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched">
+          <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${isAlreadyWatched}>
           <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
 
-          <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite">
+          <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${isFavorite}>
           <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
         </section>
       </div>
@@ -193,12 +197,12 @@ export default class Popup extends AbstractView {
   setToWatchlistClickHandler(callback) {
     this._callback.toWatchlistClick = callback;
 
-    this.getElement().querySelector(`.ilm-details__control-label--add-to-watchlist`).addEventListener(`click`, this._toWatchlistClickHandler);
+    this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, this._toWatchlistClickHandler);
   }
 
   setAlreadyWatchedClickHandler(callback) {
     this._callback.alreadyWatchedClick = callback;
 
-    this.getElement().querySelector(`.ilm-details__control-label--mark-as-watched`).addEventListener(`click`, this._alreadyWatchedClickHandler);
+    this.getElement().querySelector(`.film-details__control-label--watched`).addEventListener(`click`, this._alreadyWatchedClickHandler);
   }
 }
