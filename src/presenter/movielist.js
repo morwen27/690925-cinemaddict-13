@@ -164,6 +164,11 @@ export default class MovieList {
     replace(updatedFilm, this._allFilms[film.id]);
     remove(this._allFilms[film.id]);
 
+    if (this._popup !== null) {
+      remove(this._popup);
+      this._handleCreatePopup(film);
+    }
+
     this._allFilms[film.id] = updatedFilm;
   }
 
@@ -198,11 +203,6 @@ export default class MovieList {
   _handleFilmComponentChange(updatedFilm) {
     this._films = updateItem(this._films, updatedFilm);
     this._updateFilmComponent(updatedFilm);
-
-    if (this._popup !== null) {
-      remove(this._popup);
-      this._handleCreatePopup(updatedFilm);
-    }
   }
 
   _handleFavoriteClick(film) {
