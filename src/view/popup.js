@@ -1,6 +1,9 @@
 import AbstractView from '../abstract.js';
+import Comment from '../view/comment.js';
+
 import dayjs from "dayjs";
 import {generateStringFromArray} from '../utils/common.js';
+import {commentsData} from '../mock/generatedDatas.js';
 
 export const createPopupTemplate = (film) => {
   let {country, duration, release, rating, genre, poster, description, comments, title, ageRating, producers, screenwriters, actors, year, isFavorite, isInWatchList, isAlreadyWatched} = film;
@@ -24,7 +27,14 @@ export const createPopupTemplate = (film) => {
   screenwriters = generateStringFromArray(screenwriters, `, `);
   actors = generateStringFromArray(actors, `, `);
 
-  const commentTitle = (comments.length > 1) ? `Comments` : `Comment`;
+  const commentTitle = (comments > 1) ? `Comments` : `Comment`;
+
+  let commentTemplate = ``;
+
+  for (let i = 0; i < comments; i++) {
+    commentTemplate += new Comment(commentsData[i]).getTemplate();
+  }
+
   const genreTitle = (genre.length > 1) ? `Genres` : `Genre`;
 
   const markFavorite = isFavorite ? `checked` : ``;
@@ -107,8 +117,7 @@ export const createPopupTemplate = (film) => {
           <h3 class="film-details__comments-title">${commentTitle} <span class="film-details__comments-count">${comments}</span></h3>
 
           <ul class="film-details__comments-list">
-
-
+          ${commentTemplate}
           </ul>
 
           <div class="film-details__new-comment">

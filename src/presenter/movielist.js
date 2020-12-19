@@ -6,12 +6,9 @@ import FilmListView from '../view/film-list.js';
 import FilmCardView from '../view/film-card.js';
 import ShowMoreButtonView from '../view/show-more-button.js';
 import Popup from '../view/popup.js';
-import Comment from '../view/comment.js';
 
 import {render, renderPosition, remove, replace} from '../utils/render.js';
 import {updateItem} from "../utils/common.js";
-
-import {comments} from '../mock/generatedDatas.js';
 
 export default class MovieList {
   constructor(container) {
@@ -188,12 +185,6 @@ export default class MovieList {
 
     render(this._mainContainer.parentElement, this._popup, renderPosition.BEFOREEND);
     document.body.classList.add(`hide-overflow`);
-
-    const commentList = this._popup.getElement().querySelector(`.film-details__comments-list`);
-
-    comments.forEach((item) => {
-      render(commentList, new Comment(item), renderPosition.BEFOREEND);
-    });
 
     this._listenersForPopup(this._popup);
   }
