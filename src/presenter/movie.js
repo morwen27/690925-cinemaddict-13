@@ -2,6 +2,8 @@ import FilmCardView from '../view/film-card.js';
 import Popup from '../view/popup.js';
 import {render, renderPosition, remove, replace} from '../utils/render.js';
 
+const popupClassName = `.film-details`;
+
 export default class Movie {
   constructor(container, changeData) {
     this._filmComponentContainer = container;
@@ -68,8 +70,8 @@ export default class Movie {
   }
 
   _handleCreatePopup(film) {
-    if (document.querySelector(`.film-details`)) {
-      document.querySelector(`.film-details`).remove();
+    if (document.querySelector(popupClassName)) {
+      document.querySelector(popupClassName).remove();
     }
 
     this._popup = new Popup(film);

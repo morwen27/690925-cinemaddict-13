@@ -44,6 +44,7 @@ export default class MovieList {
     filmPresenter.init(film);
 
     this._allFilms[film.id] = filmPresenter;
+    console.log(this._allFilms);
   }
 
   _renderFilms(data, from, to, container) {
