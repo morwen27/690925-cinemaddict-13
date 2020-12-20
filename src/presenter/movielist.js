@@ -17,6 +17,8 @@ export default class MovieList {
     this._renderedFilmsCount = FILMS_PER_STEP;
 
     this._allFilms = {};
+    this._topRatedFilms = {};
+    this._mostCommentedFilms = {};
 
     this._filmListComponent = new FilmListView();
     this._showMoreButtonComponent = new ShowMoreButtonView();
@@ -39,18 +41,17 @@ export default class MovieList {
     this._renderMostCommented();
   }
 
-  _renderFilm(film, container) {
+  _renderFilm(film, container, list) {
     const filmPresenter = new Movie(container, this._handleFilmComponentChange);
     filmPresenter.init(film);
 
-    this._allFilms[film.id] = filmPresenter;
-    console.log(this._allFilms);
+    list[film.id] = filmPresenter;
   }
 
-  _renderFilms(data, from, to, container) {
+  _renderFilms(data, from, to, container, list) {
     data
       .slice(from, to)
-      .forEach((film) => this._renderFilm(film, container));
+      .forEach((film) => this._renderFilm(film, container, list));
   }
 
   _renderShowMoreButton() {
@@ -60,7 +61,7 @@ export default class MovieList {
   }
 
   _renderFilmList() {
-    this._renderFilms(this._films, 0, Math.min(this._films.length, FILMS_PER_STEP), this._filmListContainer);
+    this._renderFilms(this._films, 0, Math.min(this._films.length, FILMS_PER_STEP), this._filmListContainer, this._allFilms);
 
     if (this._films.length > FILMS_PER_STEP) {
       this._renderShowMoreButton();
@@ -80,7 +81,7 @@ export default class MovieList {
       return 0;
     }
     );
-    this._renderFilms(sortRatingFilm, 0, TOP_RATED_FILMS, this._topRatedContainer);
+    this._renderFilms(sortRatingFilm, 0, TOP_RATED_FILMS, this._topRatedContainer, this._topRatedFilms);
   }
 
   _renderMostCommented() {
@@ -96,7 +97,7 @@ export default class MovieList {
       return 0;
     }
     );
-    this._renderFilms(sortCommentedFilm, 0, MOST_COMMENTED_FILMS, this._mostCommentedContainer);
+    this._renderFilms(sortCommentedFilm, 0, MOST_COMMENTED_FILMS, this._mostCommentedContainer, this._mostCommentedFilms);
   }
 
   _destroyComponent() {
@@ -124,7 +125,19 @@ export default class MovieList {
 
   _handleFilmComponentChange(updatedFilm) {
     this._films = updateItem(this._films, updatedFilm);
-    this._allFilms[updatedFilm.id].init(updatedFilm);
+
+    if (updatedFilm.id in this._allFilms) {
+      this._allFilms[updatedFilm.id].init(updatedFilm);
+    }
+
+    if (updatedFilm.id in this._topRatedFilms) {
+      this._topRatedFilms[updatedFilm.id].init(updatedFilm);
+    }
+
+    if (updatedFilm.id in this._mostCommentedFilms) {
+      this._mostCommentedFilms[updatedFilm.id].init(updatedFilm);
+    }
+
   }
 }
 
