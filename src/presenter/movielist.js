@@ -3,12 +3,12 @@ import {TOP_RATED_FILMS} from '../constants.js';
 import {MOST_COMMENTED_FILMS} from '../constants.js';
 
 import FilmListView from '../view/film-list.js';
-import FilmCardView from '../view/film-card.js';
 import ShowMoreButtonView from '../view/show-more-button.js';
-import Popup from '../view/popup.js';
 
-import {render, renderPosition, remove, replace} from '../utils/render.js';
+import Movie from './movie.js';
+
 import {updateItem} from "../utils/common.js";
+import {render, renderPosition, remove} from '../utils/render.js';
 
 export default class MovieList {
   constructor(container) {
@@ -20,15 +20,9 @@ export default class MovieList {
 
     this._filmListComponent = new FilmListView();
     this._showMoreButtonComponent = new ShowMoreButtonView();
-    this._popup = null;
 
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
-    this._handleCreatePopup = this._handleCreatePopup.bind(this);
     this._handleFilmComponentChange = this._handleFilmComponentChange.bind(this);
-
-    this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
-    this._handleToWatchlistClick = this._handleToWatchlistClick.bind(this);
-    this._handleAlreadyWatchedClick = this._handleAlreadyWatchedClick.bind(this);
   }
 
   init(films) {
@@ -46,12 +40,10 @@ export default class MovieList {
   }
 
   _renderFilm(film, container) {
-    this._filmCardComponent = new FilmCardView(film);
-    this._addListenersForComponent(this._filmCardComponent);
+    const filmPresenter = new Movie(container, this._handleFilmComponentChange);
+    filmPresenter.init(film);
 
-    this._allFilms[film.id] = this._filmCardComponent;
-
-    render(container, this._filmCardComponent, renderPosition.BEFOREEND);
+    this._allFilms[film.id] = filmPresenter;
   }
 
   _renderFilms(data, from, to, container) {
@@ -106,38 +98,6 @@ export default class MovieList {
     this._renderFilms(sortCommentedFilm, 0, MOST_COMMENTED_FILMS, this._mostCommentedContainer);
   }
 
-  _addListenersForComponent(film) {
-    film.setOpenPopupClickHandler(this._handleCreatePopup);
-    film.setFavoriteClickHandler(this._handleFavoriteClick);
-    film.setToWatchlistClickHandler(this._handleToWatchlistClick);
-    film.setAlreadyWatchedClickHandler(this._handleAlreadyWatchedClick);
-  }
-
-  _listenersForPopup(popup) {
-    popup.setFavoriteClickHandler(this._handleFavoriteClick);
-    popup.setToWatchlistClickHandler(this._handleToWatchlistClick);
-    popup.setAlreadyWatchedClickHandler(this._handleAlreadyWatchedClick);
-
-    const closePopup = () => {
-      remove(popup);
-      this._popup = null;
-      document.body.classList.remove(`hide-overflow`);
-    };
-
-    popup.setClosePopupClickHandler(closePopup);
-
-    const closePopupEscHandler = (evt) => {
-      evt.preventDefault();
-
-      if (evt.key === `Escape` || evt.key === `Esc`) {
-        closePopup();
-        document.removeEventListener(`keydown`, closePopupEscHandler);
-      }
-    };
-
-    document.addEventListener(`keydown`, closePopupEscHandler);
-  }
-
   _destroyComponent() {
     remove(this._filmCardComponent);
   }
@@ -152,21 +112,6 @@ export default class MovieList {
     remove(this._showMoreButtonComponent);
   }
 
-  _updateFilmComponent(film) {
-    const updatedFilm = new FilmCardView(film);
-    this._addListenersForComponent(updatedFilm);
-
-    replace(updatedFilm, this._allFilms[film.id]);
-    remove(this._allFilms[film.id]);
-
-    if (this._popup !== null) {
-      remove(this._popup);
-      this._handleCreatePopup(film);
-    }
-
-    this._allFilms[film.id] = updatedFilm;
-  }
-
   _handleShowMoreButtonClick() {
     this._renderFilms(this._films, this._renderedFilmsCount, this._renderedFilmsCount + FILMS_PER_STEP, this._filmListContainer);
     this._renderedFilmsCount += FILMS_PER_STEP;
@@ -176,34 +121,10 @@ export default class MovieList {
     }
   }
 
-  _handleCreatePopup(film) {
-    if (this._popup !== null) {
-      remove(this._popup);
-    }
-
-    this._popup = new Popup(film);
-
-    render(this._mainContainer.parentElement, this._popup, renderPosition.BEFOREEND);
-    document.body.classList.add(`hide-overflow`);
-
-    this._listenersForPopup(this._popup);
-  }
-
   _handleFilmComponentChange(updatedFilm) {
     this._films = updateItem(this._films, updatedFilm);
-    this._updateFilmComponent(updatedFilm);
-  }
-
-  _handleFavoriteClick(film) {
-    this._handleFilmComponentChange(Object.assign({}, film, {isFavorite: !film.isFavorite}));
-  }
-
-  _handleToWatchlistClick(film) {
-    this._handleFilmComponentChange(Object.assign({}, film, {isInWatchList: !film.isInWatchList}));
-  }
-
-  _handleAlreadyWatchedClick(film) {
-    this._handleFilmComponentChange(Object.assign({}, film, {isAlreadyWatched: !film.isAlreadyWatched}));
+    this._allFilms[updatedFilm.id].init(updatedFilm);
   }
 }
+
 
