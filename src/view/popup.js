@@ -1,9 +1,12 @@
 import AbstractView from '../abstract.js';
+import Comment from '../view/comment.js';
+
 import dayjs from "dayjs";
 import {generateStringFromArray} from '../utils/common.js';
+import {commentsData} from '../mock/generatedDatas.js';
 
 export const createPopupTemplate = (film) => {
-  let {country, duration, release, rating, genre, poster, description, comments, title, ageRating, producers, screenwriters, actors, year} = film;
+  let {country, duration, release, rating, genre, poster, description, comments, title, ageRating, producers, screenwriters, actors, year, isFavorite, isInWatchList, isAlreadyWatched} = film;
 
   const generateMarkUpFromArray = (array, tag, tagsClass) => {
     let arrayElement = ``;
@@ -24,8 +27,19 @@ export const createPopupTemplate = (film) => {
   screenwriters = generateStringFromArray(screenwriters, `, `);
   actors = generateStringFromArray(actors, `, `);
 
-  const commentTitle = (comments.length > 1) ? `Comments` : `Comment`;
+  const commentTitle = (comments > 1) ? `Comments` : `Comment`;
+
+  let commentTemplate = ``;
+
+  for (let i = 0; i < comments; i++) {
+    commentTemplate += new Comment(commentsData[i]).getTemplate();
+  }
+
   const genreTitle = (genre.length > 1) ? `Genres` : `Genre`;
+
+  const markFavorite = isFavorite ? `checked` : ``;
+  const markInWatchList = isInWatchList ? `checked` : ``;
+  const markAlreadyWatched = isAlreadyWatched ? `checked` : ``;
 
   return `<section class="film-details">
     <form class="film-details__inner" action="" method="get">
@@ -87,13 +101,13 @@ export const createPopupTemplate = (film) => {
         </div>
 
         <section class="film-details__controls">
-          <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
+          <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${markInWatchList}>
           <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
-          <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched">
+          <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${markAlreadyWatched}>
           <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
 
-          <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite">
+          <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${markFavorite}>
           <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
         </section>
       </div>
@@ -103,8 +117,7 @@ export const createPopupTemplate = (film) => {
           <h3 class="film-details__comments-title">${commentTitle} <span class="film-details__comments-count">${comments}</span></h3>
 
           <ul class="film-details__comments-list">
-
-
+          ${commentTemplate}
           </ul>
 
           <div class="film-details__new-comment">
@@ -148,6 +161,10 @@ export default class Popup extends AbstractView {
     this._film = film;
 
     this._closePopupClickHandler = this._closePopupClickHandler.bind(this);
+
+    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
+    this._toWatchlistClickHandler = this._toWatchlistClickHandler.bind(this);
+    this._alreadyWatchedClickHandler = this._alreadyWatchedClickHandler.bind(this);
   }
 
   getTemplate() {
@@ -159,9 +176,42 @@ export default class Popup extends AbstractView {
     this._callback.closePopupClick();
   }
 
+  _favoriteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.favoriteClick(this._film);
+  }
+
+  _toWatchlistClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.toWatchlistClick(this._film);
+  }
+
+  _alreadyWatchedClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.alreadyWatchedClick(this._film);
+  }
+
   setClosePopupClickHandler(callback) {
     this._callback.closePopupClick = callback;
 
     this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._closePopupClickHandler);
+  }
+
+  setFavoriteClickHandler(callback) {
+    this._callback.favoriteClick = callback;
+
+    this.getElement().querySelector(`.film-details__control-label--favorite`).addEventListener(`click`, this._favoriteClickHandler);
+  }
+
+  setToWatchlistClickHandler(callback) {
+    this._callback.toWatchlistClick = callback;
+
+    this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, this._toWatchlistClickHandler);
+  }
+
+  setAlreadyWatchedClickHandler(callback) {
+    this._callback.alreadyWatchedClick = callback;
+
+    this.getElement().querySelector(`.film-details__control-label--watched`).addEventListener(`click`, this._alreadyWatchedClickHandler);
   }
 }
