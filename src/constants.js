@@ -3,3 +3,10 @@ export const FILMS_PER_STEP = 5;
 export const TOP_RATED_FILMS = 2;
 export const MOST_COMMENTED_FILMS = 2;
 export const MAX_QUANTITY_COMMENTS = 5;
+
+export const SortType = {
+  DEFAULT: `default`,
+  WATCHLIST: `watchlist`,
+  HISTORY: `history`,
+  FAVORITE: `favorite`,
+};

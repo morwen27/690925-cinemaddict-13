@@ -1,9 +1,12 @@
-import {FILMS_PER_STEP} from '../constants.js';
+import {FILMS_PER_STEP, SortType} from '../constants.js';
 import {TOP_RATED_FILMS} from '../constants.js';
 import {MOST_COMMENTED_FILMS} from '../constants.js';
 
+import SortView from '../view/sort.js';
 import FilmListView from '../view/film-list.js';
 import ShowMoreButtonView from '../view/show-more-button.js';
+import Statistic from '../view/stats.js';
+import NoFilmsMessage from '../view/no-films.js';
 
 import Movie from './movie.js';
 
@@ -22,13 +25,28 @@ export default class MovieList {
 
     this._filmListComponent = new FilmListView();
     this._showMoreButtonComponent = new ShowMoreButtonView();
+    this._sortComponent = new SortView(); // моки не забудь
+    this._statisticComponent = new Statistic(); // моки не забудь
+    this._NoFilmsMessageComponent = new NoFilmsMessage();
+
+    this._currentSortType = SortType.DEFAULT;
 
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
     this._handleFilmComponentChange = this._handleFilmComponentChange.bind(this);
+    this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
   }
 
   init(films) {
     this._films = films.slice();
+    this._sourcedFilmList = films.slice();
+
+    this._renderSortComponent();
+
+    if (this._films.length !== 0) {
+      this._renderStatistic();
+    } else {
+      this._renderNoFilmMessage();
+    }
 
     render(this._mainContainer, this._filmListComponent, renderPosition.BEFOREEND);
 
@@ -52,6 +70,19 @@ export default class MovieList {
     data
       .slice(from, to)
       .forEach((film) => this._renderFilm(film, container, list));
+  }
+
+  _renderSortComponent() {
+    render(this._mainContainer, this._sortComponent, renderPosition.AFTERBEGIN);
+    this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
+  }
+
+  _renderStatistic() {
+    render(this._mainContainer, this._statisticComponent, renderPosition.BEFOREEND);
+  }
+
+  _renderNoFilmMessage() {
+    render(this._mainContainer, this._NoFilmsMessageComponent, renderPosition.BEFOREEND);
   }
 
   _renderShowMoreButton() {
@@ -100,6 +131,28 @@ export default class MovieList {
     this._renderFilms(sortCommentedFilm, 0, MOST_COMMENTED_FILMS, this._mostCommentedContainer, this._mostCommentedFilms);
   }
 
+  _sortFilms(sortType) {
+
+    switch (sortType) {
+      case SortType.WATCHLIST:
+        this._films = this._films.filter(film => film.isInWatchList === true);
+        console.log(this._films.length);
+        break;
+      case SortType.HISTORY:
+        this._films = this._films.filter(film => film.isAlreadyWatched === true);
+        console.log(this._films.length);
+        break;
+      case SortType.FAVORITE:
+        this._films = this._films.filter(film => film.isFavorite === true);
+        console.log(this._films.length);
+        break;
+      default:
+        this._films = this._sourcedFilmList.slice();
+    }
+
+    this._currentSortType = sortType;
+  }
+
   _destroyComponent() {
     remove(this._filmCardComponent);
   }
@@ -110,12 +163,12 @@ export default class MovieList {
       .forEach((component) => component._destroyComponent());
 
     this._allFilms = {};
-    this.renderedFilms = FILMS_PER_STEP;
+    this._renderedFilmsCount = FILMS_PER_STEP;
     remove(this._showMoreButtonComponent);
   }
 
   _handleShowMoreButtonClick() {
-    this._renderFilms(this._films, this._renderedFilmsCount, this._renderedFilmsCount + FILMS_PER_STEP, this._filmListContainer);
+    this._renderFilms(this._films, this._renderedFilmsCount, this._renderedFilmsCount + FILMS_PER_STEP, this._filmListContainer, this._allFilms);
     this._renderedFilmsCount += FILMS_PER_STEP;
 
     if (this._renderedFilmsCount >= this._films.length) {
@@ -138,6 +191,16 @@ export default class MovieList {
       this._mostCommentedFilms[updatedFilm.id].init(updatedFilm);
     }
 
+  }
+
+  _handleSortTypeChange(sortType) {
+    if (this._currentSortType === sortType) {
+      return;
+    }
+
+    this._sortFilms(sortType);
+    this._clearFilmList();
+    this._renderFilmList();
   }
 }
 
