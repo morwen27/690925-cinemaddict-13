@@ -135,16 +135,13 @@ export default class MovieList {
 
     switch (sortType) {
       case SortType.WATCHLIST:
-        this._films = this._films.filter(film => film.isInWatchList === true);
-        console.log(this._films.length);
+        this._films = this._films.filter((film) => film.isInWatchList === true);
         break;
       case SortType.HISTORY:
-        this._films = this._films.filter(film => film.isAlreadyWatched === true);
-        console.log(this._films.length);
+        this._films = this._films.filter((film) => film.isAlreadyWatched === true);
         break;
       case SortType.FAVORITE:
-        this._films = this._films.filter(film => film.isFavorite === true);
-        console.log(this._films.length);
+        this._films = this._films.filter((film) => film.isFavorite === true);
         break;
       default:
         this._films = this._sourcedFilmList.slice();
@@ -153,14 +150,10 @@ export default class MovieList {
     this._currentSortType = sortType;
   }
 
-  _destroyComponent() {
-    remove(this._filmCardComponent);
-  }
-
   _clearFilmList() {
     Object
       .values(this._allFilms)
-      .forEach((component) => component._destroyComponent());
+      .forEach((presenter) => presenter.destroy());
 
     this._allFilms = {};
     this._renderedFilmsCount = FILMS_PER_STEP;

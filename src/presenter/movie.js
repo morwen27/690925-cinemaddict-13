@@ -44,6 +44,10 @@ export default class Movie {
     }
   }
 
+  destroy() {
+    remove(this._filmComponent);
+  }
+
   _listenersForPopup(popup) {
     popup.setFavoriteClickHandler(this._handleFavoriteClick);
     popup.setToWatchlistClickHandler(this._handleToWatchlistClick);

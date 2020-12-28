@@ -1,9 +1,6 @@
 import AbstractView from '../abstract.js';
 
-export const createStatisticTemplate = (filterTemplate, profileInfo) => {
-
-  // const {history, totalDurationHours, totalDurationMinutes, favoriteGenre} = filterTemplate;
-  // const {rank} = profileInfo;
+export const createStatisticTemplate = () => {
 
   return `<section class="statistic">
     <p class="statistic__rank">
@@ -47,8 +44,6 @@ export const createStatisticTemplate = (filterTemplate, profileInfo) => {
 export default class Statistic extends AbstractView {
   constructor() {
     super();
-    // this._filter = filter;
-    // this._profile = profile;
   }
 
   getTemplate() {
