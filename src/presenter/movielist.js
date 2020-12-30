@@ -25,8 +25,8 @@ export default class MovieList {
 
     this._filmListComponent = new FilmListView();
     this._showMoreButtonComponent = new ShowMoreButtonView();
-    this._sortComponent = new SortView(); // моки не забудь
-    this._statisticComponent = new Statistic(); // моки не забудь
+    this._sortComponent = new SortView();
+    this._statisticComponent = new Statistic();
     this._NoFilmsMessageComponent = new NoFilmsMessage();
 
     this._currentSortType = SortType.DEFAULT;
@@ -42,21 +42,20 @@ export default class MovieList {
 
     this._renderSortComponent();
 
-    if (this._films.length !== 0) {
+    if (this._films.length) {
       this._renderStatistic();
+      render(this._mainContainer, this._filmListComponent, renderPosition.BEFOREEND);
+
+      this._filmListContainer = this._mainContainer.querySelector(`.films-list > .films-list__container`);
+      this._topRatedContainer = this._mainContainer.querySelector(`.films-list + .films-list--extra .films-list__container`);
+      this._mostCommentedContainer = this._mainContainer.querySelector(`.films-list--extra + .films-list--extra .films-list__container`);
+
+      this._renderFilmList();
+      this._renderTopRated();
+      this._renderMostCommented();
     } else {
       this._renderNoFilmMessage();
     }
-
-    render(this._mainContainer, this._filmListComponent, renderPosition.BEFOREEND);
-
-    this._filmListContainer = this._mainContainer.querySelector(`.films-list > .films-list__container`);
-    this._topRatedContainer = this._mainContainer.querySelector(`.films-list + .films-list--extra .films-list__container`);
-    this._mostCommentedContainer = this._mainContainer.querySelector(`.films-list--extra + .films-list--extra .films-list__container`);
-
-    this._renderFilmList();
-    this._renderTopRated();
-    this._renderMostCommented();
   }
 
   _renderFilm(film, container, list) {
@@ -101,33 +100,33 @@ export default class MovieList {
 
   _renderTopRated() {
     const sortRatingFilm = this._films
-    .slice()
-    .sort((a, b) => {
-      if (a.rating > b.rating) {
-        return -1;
+      .slice()
+      .sort((a, b) => {
+        if (a.rating > b.rating) {
+          return -1;
+        }
+        if (a.rating < b.rating) {
+          return 1;
+        }
+        return 0;
       }
-      if (a.rating < b.rating) {
-        return 1;
-      }
-      return 0;
-    }
-    );
+      );
     this._renderFilms(sortRatingFilm, 0, TOP_RATED_FILMS, this._topRatedContainer, this._topRatedFilms);
   }
 
   _renderMostCommented() {
     const sortCommentedFilm = this._films
-    .slice()
-    .sort((a, b) => {
-      if (a.comments > b.comments) {
-        return -1;
+      .slice()
+      .sort((a, b) => {
+        if (a.comments > b.comments) {
+          return -1;
+        }
+        if (a.comments < b.comments) {
+          return 1;
+        }
+        return 0;
       }
-      if (a.comments < b.comments) {
-        return 1;
-      }
-      return 0;
-    }
-    );
+      );
     this._renderFilms(sortCommentedFilm, 0, MOST_COMMENTED_FILMS, this._mostCommentedContainer, this._mostCommentedFilms);
   }
 
@@ -135,13 +134,13 @@ export default class MovieList {
 
     switch (sortType) {
       case SortType.WATCHLIST:
-        this._films = this._films.filter((film) => film.isInWatchList === true);
+        this._films = this._films.filter((film) => film.isInWatchList);
         break;
       case SortType.HISTORY:
-        this._films = this._films.filter((film) => film.isAlreadyWatched === true);
+        this._films = this._films.filter((film) => film.isAlreadyWatched);
         break;
       case SortType.FAVORITE:
-        this._films = this._films.filter((film) => film.isFavorite === true);
+        this._films = this._films.filter((film) => film.isFavorite);
         break;
       default:
         this._films = this._sourcedFilmList.slice();
