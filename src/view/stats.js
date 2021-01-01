@@ -1,15 +1,12 @@
 import AbstractView from '../abstract.js';
 
-export const createStatisticTemplate = (filterTemplate, profileInfo) => {
-
-  const {history, totalDurationHours, totalDurationMinutes, favoriteGenre} = filterTemplate;
-  const {rank} = profileInfo;
+export const createStatisticTemplate = () => {
 
   return `<section class="statistic">
     <p class="statistic__rank">
       Your rank
       <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-      <span class="statistic__rank-label">${rank}</span>
+      <span class="statistic__rank-label"></span>
     </p>
     <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
       <p class="statistic__filters-description">Show stats:</p>
@@ -27,15 +24,15 @@ export const createStatisticTemplate = (filterTemplate, profileInfo) => {
     <ul class="statistic__text-list">
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">You watched</h4>
-        <p class="statistic__item-text">${history}<span class="statistic__item-description">movies</span></p>
+        <p class="statistic__item-text"><span class="statistic__item-description">movies</span></p>
       </li>
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">Total duration</h4>
-        <p class="statistic__item-text">${totalDurationHours} <span class="statistic__item-description">h</span> ${totalDurationMinutes} <span class="statistic__item-description">m</span></p>
+        <p class="statistic__item-text"> <span class="statistic__item-description">h</span>  <span class="statistic__item-description">m</span></p>
       </li>
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">Top genre</h4>
-        <p class="statistic__item-text">${favoriteGenre}</p>
+        <p class="statistic__item-text"></p>
       </li>
     </ul>
     <div class="statistic__chart-wrap">
@@ -45,13 +42,11 @@ export const createStatisticTemplate = (filterTemplate, profileInfo) => {
 };
 
 export default class Statistic extends AbstractView {
-  constructor(filter, profile) {
+  constructor() {
     super();
-    this._filter = filter;
-    this._profile = profile;
   }
 
   getTemplate() {
-    return createStatisticTemplate(this._filter, this._profile);
+    return createStatisticTemplate();
   }
 }
