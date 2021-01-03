@@ -210,14 +210,7 @@ export default class Popup extends SmartView {
       return;
     }
 
-    this._compensateScroll(this.getElement().scrollTop);
     this.updateData({newCommentEmoji: evt.target.parentElement.htmlFor});
-  }
-
-  _compensateScroll(YScrollPosition) {
-    let currentScroll = YScrollPosition;
-
-    return currentScroll;
   }
 
   setFormCommentSubmitHandler(callback) {
