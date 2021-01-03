@@ -41,7 +41,7 @@ export const createPopupTemplate = (data) => {
   const markInWatchList = isInWatchList ? `checked` : ``;
   const markAlreadyWatched = isAlreadyWatched ? `checked` : ``;
 
-  const newEmoji = (newCommentEmoji === null) ? `` : newCommentEmoji;
+  const newEmoji = (newCommentEmoji === null) ? `` : `<img src="./images/emoji/` + newCommentEmoji.replace(`emoji-`, ``) + `.png" width="55" height="55" alt="` + newCommentEmoji + `">`;
 
   return `<section class="film-details">
     <form class="film-details__inner" action="" method="get">
@@ -211,11 +211,7 @@ export default class Popup extends SmartView {
     }
 
     this._compensateScroll(this.getElement().scrollTop);
-
-    let emojiAlt = evt.target.parentElement.htmlFor;
-    let srcEmoji = evt.target.src;
-
-    this.updateData({newCommentEmoji: `<img src="` + srcEmoji + `" width="55" height="55" alt="` + emojiAlt + `">`});
+    this.updateData({newCommentEmoji: evt.target.parentElement.htmlFor});
   }
 
   _compensateScroll(YScrollPosition) {

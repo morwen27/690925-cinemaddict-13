@@ -110,7 +110,7 @@ export const generateFilmCard = () => {
     actors: generateRandomArray(actors, 4),
     year,
     release: generateDateRelease(),
-    duration: getRandomInteger(0, 3) + `h ` + getRandomInteger(0, 59) + `m`,
+    filmDuration: getRandomInteger(0, 300),
     country: generateRandomValue(countries),
     genre: generateRandomArray(genres, 3),
     description: generateDescription(),
