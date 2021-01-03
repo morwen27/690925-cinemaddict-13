@@ -102,13 +102,7 @@ export default class MovieList {
     const sortRatingFilm = this._films
       .slice()
       .sort((a, b) => {
-        if (a.rating > b.rating) {
-          return -1;
-        }
-        if (a.rating < b.rating) {
-          return 1;
-        }
-        return 0;
+        return b.rating - a.rating;
       }
       );
     this._renderFilms(sortRatingFilm, 0, TOP_RATED_FILMS, this._topRatedContainer, this._topRatedFilms);
@@ -118,13 +112,7 @@ export default class MovieList {
     const sortCommentedFilm = this._films
       .slice()
       .sort((a, b) => {
-        if (a.comments > b.comments) {
-          return -1;
-        }
-        if (a.comments < b.comments) {
-          return 1;
-        }
-        return 0;
+        return b.comments - a.comments;
       }
       );
     this._renderFilms(sortCommentedFilm, 0, MOST_COMMENTED_FILMS, this._mostCommentedContainer, this._mostCommentedFilms);

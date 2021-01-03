@@ -39,8 +39,9 @@ export default class Movie {
     remove(prevFilmComponent);
 
     if (this._popup !== null) {
+      const currentScroll = this._popup.getElement().scrollTop;
       remove(this._popup);
-      this._handleCreatePopup(film);
+      this._handleCreatePopup(film, currentScroll);
     }
   }
 
@@ -73,7 +74,7 @@ export default class Movie {
     document.addEventListener(`keydown`, closePopupEscHandler);
   }
 
-  _handleCreatePopup(film) {
+  _handleCreatePopup(film, position) {
     if (document.querySelector(popupClassName)) {
       document.querySelector(popupClassName).remove();
     }
@@ -82,6 +83,8 @@ export default class Movie {
     this._listenersForPopup(this._popup);
 
     render(document.body, this._popup, renderPosition.BEFOREEND);
+    this._popup.getElement().scrollTop = position;
+
     document.body.classList.add(`hide-overflow`);
   }
 
