@@ -5,8 +5,8 @@ import dayjs from "dayjs";
 import {generateStringFromArray} from '../utils/common.js';
 import {commentsData} from '../mock/generatedDatas.js';
 
-export const createPopupTemplate = (data) => {
-  let {country, duration, release, rating, genre, poster, description, comments, title, ageRating, producers, screenwriters, actors, year, isFavorite, isInWatchList, isAlreadyWatched, newCommentEmoji} = data;
+export const createPopupTemplate = (data, emoji) => {
+  let {country, duration, release, rating, genre, poster, description, comments, title, ageRating, producers, screenwriters, actors, year, isFavorite, isInWatchList, isAlreadyWatched} = data;
 
   const generateMarkUpFromArray = (array, tag, tagsClass) => {
     let arrayElement = ``;
@@ -41,7 +41,7 @@ export const createPopupTemplate = (data) => {
   const markInWatchList = isInWatchList ? `checked` : ``;
   const markAlreadyWatched = isAlreadyWatched ? `checked` : ``;
 
-  const newEmoji = (newCommentEmoji === null) ? `` : `<img src="./images/emoji/` + newCommentEmoji.replace(`emoji-`, ``) + `.png" width="55" height="55" alt="` + newCommentEmoji + `">`;
+  const newEmoji = (emoji === null) ? `` : `<img src="./images/emoji/` + emoji + `.png" width="55" height="55" alt="emoji-` + emoji + `">`;
 
   return `<section class="film-details">
     <form class="film-details__inner" action="" method="get">
@@ -163,6 +163,8 @@ export default class Popup extends SmartView {
     this._film = film;
     this._data = Popup.parseFilmToData(film);
 
+    this._newEmoji = null;
+
     this._closePopupClickHandler = this._closePopupClickHandler.bind(this);
     this._formCommentSubmitHandler = this._formCommentSubmitHandler.bind(this);
     this._chooseNewCommentEmoji = this._chooseNewCommentEmoji.bind(this);
@@ -175,7 +177,7 @@ export default class Popup extends SmartView {
   }
 
   getTemplate() {
-    return createPopupTemplate(this._data);
+    return createPopupTemplate(this._data, this._newEmoji);
   }
 
   _formCommentSubmitHandler(evt) {
@@ -210,7 +212,9 @@ export default class Popup extends SmartView {
       return;
     }
 
-    this.updateData({newCommentEmoji: evt.target.parentElement.htmlFor});
+    this._newEmoji = evt.target.parentElement.htmlFor.replace(`emoji-`, ``);
+
+    this.updateData({});
   }
 
   setFormCommentSubmitHandler(callback) {
@@ -243,7 +247,7 @@ export default class Popup extends SmartView {
   }
 
   static parseFilmToData(film) {
-    return Object.assign({}, film, {newCommentEmoji: null});
+    return Object.assign({}, film, {});
   }
 
   static parseDataToFilm(data) {
