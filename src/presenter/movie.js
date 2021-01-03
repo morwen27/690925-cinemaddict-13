@@ -40,8 +40,15 @@ export default class Movie {
 
     if (this._popup !== null) {
       const currentScroll = this._popup.getElement().scrollTop;
+      let newEmoji = null;
+      const currentNewEmojiImg = document.querySelector(`.film-details__add-emoji-label`);
+
+      if (currentNewEmojiImg.querySelector(`img`)) {
+        newEmoji = currentNewEmojiImg.querySelector(`img`).alt.replace(`emoji-`, ``);
+      }
+
       remove(this._popup);
-      this._handleCreatePopup(film, currentScroll);
+      this._handleCreatePopup(film, currentScroll, newEmoji);
     }
   }
 
@@ -74,12 +81,12 @@ export default class Movie {
     document.addEventListener(`keydown`, closePopupEscHandler);
   }
 
-  _handleCreatePopup(film, position) {
+  _handleCreatePopup(film, position, emoji = null) {
     if (document.querySelector(popupClassName)) {
       document.querySelector(popupClassName).remove();
     }
 
-    this._popup = new Popup(film);
+    this._popup = new Popup(film, emoji);
     this._listenersForPopup(this._popup);
 
     render(document.body, this._popup, renderPosition.BEFOREEND);

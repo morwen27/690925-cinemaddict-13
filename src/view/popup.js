@@ -158,12 +158,12 @@ export const createPopupTemplate = (data, emoji) => {
 };
 
 export default class Popup extends SmartView {
-  constructor(film) {
+  constructor(film, emoji) {
     super();
     this._film = film;
     this._data = Popup.parseFilmToData(film);
 
-    this._newEmoji = null;
+    this._newEmoji = emoji;
 
     this._closePopupClickHandler = this._closePopupClickHandler.bind(this);
     this._formCommentSubmitHandler = this._formCommentSubmitHandler.bind(this);
