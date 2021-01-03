@@ -103,7 +103,7 @@ export const generateFilmCard = () => {
     id: generateId(),
     title,
     originTitle: title,
-    poster: `/images/posters/` + generateRandomValue(posters),
+    poster: `./images/posters/` + generateRandomValue(posters),
     rating: (Math.random() * 10).toFixed(1),
     producers: generateRandomArray(producers, 1),
     screenwriters: generateRandomArray(screenwriters, 3),

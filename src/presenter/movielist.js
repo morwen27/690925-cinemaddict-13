@@ -43,7 +43,7 @@ export default class MovieList {
     this._renderSortComponent();
 
     if (this._films.length) {
-      this._renderStatistic();
+      //this._renderStatistic();
       render(this._mainContainer, this._filmListComponent, renderPosition.BEFOREEND);
 
       this._filmListContainer = this._mainContainer.querySelector(`.films-list > .films-list__container`);
