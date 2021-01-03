@@ -265,8 +265,6 @@ export default class Popup extends SmartView {
     }
 
     delete data.newCommentEmoji;
-
-    return data;
   }
 
   _setInnerHandlers() {
