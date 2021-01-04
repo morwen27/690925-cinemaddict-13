@@ -1,11 +1,11 @@
-import SmartView from './smart.js';
+import SmartView from '../smart.js';
 import Comment from '../view/comment.js';
 
 import dayjs from "dayjs";
 import {generateStringFromArray} from '../utils/common.js';
 import {commentsData} from '../mock/generatedDatas.js';
 
-export const createPopupTemplate = (data, emoji) => {
+export const createPopupTemplate = (data, emoji, comment) => {
   let {country, duration, release, rating, genre, poster, description, comments, title, ageRating, producers, screenwriters, actors, year, isFavorite, isInWatchList, isAlreadyWatched} = data;
 
   const generateMarkUpFromArray = (array, tag, tagsClass) => {
@@ -41,7 +41,7 @@ export const createPopupTemplate = (data, emoji) => {
   const markInWatchList = isInWatchList ? `checked` : ``;
   const markAlreadyWatched = isAlreadyWatched ? `checked` : ``;
 
-  const newEmoji = (emoji === null) ? `` : `<img src="./images/emoji/` + emoji + `.png" width="55" height="55" alt="emoji-` + emoji + `">`;
+  const newEmoji = (emoji === null) ? `` : `<img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji-${emoji}">`;
 
   return `<section class="film-details">
     <form class="film-details__inner" action="" method="get">
@@ -126,7 +126,7 @@ export const createPopupTemplate = (data, emoji) => {
             <div class="film-details__add-emoji-label">${newEmoji}</div>
 
             <label class="film-details__comment-label">
-              <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
+              <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${comment}</textarea>
             </label>
 
             <div class="film-details__emoji-list">
@@ -158,16 +158,18 @@ export const createPopupTemplate = (data, emoji) => {
 };
 
 export default class Popup extends SmartView {
-  constructor(film, emoji) {
+  constructor(film, emoji, comment) {
     super();
     this._film = film;
     this._data = Popup.parseFilmToData(film);
 
     this._newEmoji = emoji;
+    this._newCommentText = comment;
 
     this._closePopupClickHandler = this._closePopupClickHandler.bind(this);
     this._formCommentSubmitHandler = this._formCommentSubmitHandler.bind(this);
     this._chooseNewCommentEmoji = this._chooseNewCommentEmoji.bind(this);
+    this._newCommentInputHandler = this._newCommentInputHandler.bind(this);
 
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
     this._toWatchlistClickHandler = this._toWatchlistClickHandler.bind(this);
@@ -177,7 +179,7 @@ export default class Popup extends SmartView {
   }
 
   getTemplate() {
-    return createPopupTemplate(this._data, this._newEmoji);
+    return createPopupTemplate(this._data, this._newEmoji, this._newCommentText);
   }
 
   _formCommentSubmitHandler(evt) {
@@ -214,7 +216,14 @@ export default class Popup extends SmartView {
 
     this._newEmoji = evt.target.parentElement.htmlFor.replace(`emoji-`, ``);
 
-    this.updateData({});
+    this.updateData({newCommentEmoji: this._newEmoji});
+  }
+
+  _newCommentInputHandler(evt) {
+    evt.preventDefault();
+
+    this._newCommentText = evt.target.value;
+    this.updateData({newCommentText: evt.target.value}, true);
   }
 
   setFormCommentSubmitHandler(callback) {
@@ -247,21 +256,27 @@ export default class Popup extends SmartView {
   }
 
   static parseFilmToData(film) {
-    return Object.assign({}, film, {});
+    return Object.assign({}, film, {newCommentText: ``, newCommentEmoji: null});
   }
 
   static parseDataToFilm(data) {
     data = Object.assign({}, data);
 
-    if (data.newCommentEmoji === null) {
-      return;
+    if (!data.newCommentEmoji) {
+      data.newCommentEmoji = null;
+    }
+
+    if (!data.newCommentText) {
+      data.newCommentText = ``;
     }
 
     delete data.newCommentEmoji;
+    delete data.newCommentText;
   }
 
   _setInnerHandlers() {
     this.getElement().querySelector(`.film-details__emoji-list`).addEventListener(`click`, this._chooseNewCommentEmoji);
+    this.getElement().querySelector(`.film-details__comment-input`).addEventListener(`input`, this._newCommentInputHandler);
   }
 
   restoreHandlers() {

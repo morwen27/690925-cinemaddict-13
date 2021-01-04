@@ -7,9 +7,9 @@ export const createFilmCardTemplate = (film) => {
     description.substring(0, 139) + `(...)`
     : description;
 
-  let filmDurationMinutes = filmDuration % 60;
-  let filmDurationHours = (filmDuration - filmDurationMinutes) / 60;
-  let filmDurationFormated = filmDurationHours + `h ` + filmDurationMinutes + `m`;
+  const filmDurationMinutes = filmDuration % 60;
+  const filmDurationHours = (filmDuration - filmDurationMinutes) / 60;
+  const filmDurationFormated = filmDurationHours + `h ` + filmDurationMinutes + `m`;
 
   const markFavorite = isFavorite ? `film-card__controls-item--active` : ``;
   const markInWatchList = isInWatchList ? `film-card__controls-item--active` : ``;

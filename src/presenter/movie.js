@@ -40,15 +40,23 @@ export default class Movie {
 
     if (this._popup !== null) {
       const currentScroll = this._popup.getElement().scrollTop;
+
       let newEmoji = null;
+      let newComment = ``;
       const currentNewEmojiImg = document.querySelector(`.film-details__add-emoji-label`);
+      const currentNewComment = document.querySelector(`.film-details__comment-input`);
 
       if (currentNewEmojiImg.querySelector(`img`)) {
         newEmoji = currentNewEmojiImg.querySelector(`img`).alt.replace(`emoji-`, ``);
       }
+      if (currentNewComment.value !== ``) {
+        newComment = currentNewComment.value;
+      }
 
       remove(this._popup);
-      this._handleCreatePopup(film, currentScroll, newEmoji);
+      document.removeEventListener(`keyup`, this._popup._callback.closePopupEscHandler);
+
+      this._handleCreatePopup(film, currentScroll, newEmoji, newComment);
     }
   }
 
@@ -74,19 +82,22 @@ export default class Movie {
 
       if (evt.key === `Escape` || evt.key === `Esc`) {
         closePopup();
-        document.removeEventListener(`keydown`, closePopupEscHandler);
+        document.removeEventListener(`keyup`, closePopupEscHandler);
       }
     };
 
-    document.addEventListener(`keydown`, closePopupEscHandler);
+    this._popup._callback.closePopupEscHandler = closePopupEscHandler;
+    document.addEventListener(`keyup`, this._popup._callback.closePopupEscHandler);
+
   }
 
-  _handleCreatePopup(film, position, emoji = null) {
+  _handleCreatePopup(film, position, emoji = null, comment = ``) {
+
     if (document.querySelector(popupClassName)) {
       document.querySelector(popupClassName).remove();
     }
 
-    this._popup = new Popup(film, emoji);
+    this._popup = new Popup(film, emoji, comment);
     this._listenersForPopup(this._popup);
 
     render(document.body, this._popup, renderPosition.BEFOREEND);
@@ -96,14 +107,14 @@ export default class Movie {
   }
 
   _handleFavoriteClick(film) {
-    this._updateFilmComponent(Object.assign({}, film, {isFavorite: !film.isFavorite}));
+    this._updateFilmComponent(Object.assign({}, film, { isFavorite: !film.isFavorite }));
   }
 
   _handleToWatchlistClick(film) {
-    this._updateFilmComponent(Object.assign({}, film, {isInWatchList: !film.isInWatchList}));
+    this._updateFilmComponent(Object.assign({}, film, { isInWatchList: !film.isInWatchList }));
   }
 
   _handleAlreadyWatchedClick(film) {
-    this._updateFilmComponent(Object.assign({}, film, {isAlreadyWatched: !film.isAlreadyWatched}));
+    this._updateFilmComponent(Object.assign({}, film, { isAlreadyWatched: !film.isAlreadyWatched }));
   }
 }
