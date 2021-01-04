@@ -107,14 +107,14 @@ export default class Movie {
   }
 
   _handleFavoriteClick(film) {
-    this._updateFilmComponent(Object.assign({}, film, { isFavorite: !film.isFavorite }));
+    this._updateFilmComponent(Object.assign({}, film, {isFavorite: !film.isFavorite}));
   }
 
   _handleToWatchlistClick(film) {
-    this._updateFilmComponent(Object.assign({}, film, { isInWatchList: !film.isInWatchList }));
+    this._updateFilmComponent(Object.assign({}, film, {isInWatchList: !film.isInWatchList}));
   }
 
   _handleAlreadyWatchedClick(film) {
-    this._updateFilmComponent(Object.assign({}, film, { isAlreadyWatched: !film.isAlreadyWatched }));
+    this._updateFilmComponent(Object.assign({}, film, {isAlreadyWatched: !film.isAlreadyWatched}));
   }
 }
