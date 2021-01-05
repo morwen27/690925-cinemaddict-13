@@ -163,8 +163,8 @@ export default class Popup extends SmartView {
     this._film = film;
     this._data = Popup.parseFilmToData(film);
 
-    this._newEmoji = emoji;
-    this._newCommentText = comment;
+    this._data.newCommentEmoji = emoji;
+    this._data.newCommentText = comment;
 
     this._closePopupClickHandler = this._closePopupClickHandler.bind(this);
     this._formCommentSubmitHandler = this._formCommentSubmitHandler.bind(this);
@@ -179,7 +179,7 @@ export default class Popup extends SmartView {
   }
 
   getTemplate() {
-    return createPopupTemplate(this._data, this._newEmoji, this._newCommentText);
+    return createPopupTemplate(this._data, this._data.newCommentEmoji, this._data.newCommentText);
   }
 
   _formCommentSubmitHandler(evt) {
@@ -214,15 +214,20 @@ export default class Popup extends SmartView {
       return;
     }
 
-    this._newEmoji = evt.target.parentElement.htmlFor.replace(`emoji-`, ``);
+    const prevEmoji = this._data.newCommentEmoji;
+    this._data.newCommentEmoji = evt.target.parentElement.previousElementSibling.value;
 
-    this.updateData({newCommentEmoji: this._newEmoji});
+    if (prevEmoji === this._data.newCommentEmoji) {
+      return;
+    }
+
+    this.updateData({newCommentEmoji: this._data.newCommentEmoji});
   }
 
   _newCommentInputHandler(evt) {
     evt.preventDefault();
 
-    this._newCommentText = evt.target.value;
+    this._data.newCommentText = evt.target.value;
     this.updateData({newCommentText: evt.target.value}, true);
   }
 
@@ -261,14 +266,6 @@ export default class Popup extends SmartView {
 
   static parseDataToFilm(data) {
     data = Object.assign({}, data);
-
-    if (!data.newCommentEmoji) {
-      data.newCommentEmoji = null;
-    }
-
-    if (!data.newCommentText) {
-      data.newCommentText = ``;
-    }
 
     delete data.newCommentEmoji;
     delete data.newCommentText;

@@ -88,7 +88,6 @@ export default class Movie {
 
     this._popup._callback.closePopupEscHandler = closePopupEscHandler;
     document.addEventListener(`keyup`, this._popup._callback.closePopupEscHandler);
-
   }
 
   _handleCreatePopup(film, position, emoji = null, comment = ``) {
