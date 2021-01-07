@@ -1,11 +1,15 @@
 import AbstractView from '../abstract.js';
 
 export const createFilmCardTemplate = (film) => {
-  let {rating, year, duration, genre, poster, description, comments, title, isFavorite, isInWatchList, isAlreadyWatched} = film;
+  let {rating, year, filmDuration, genre, poster, description, comments, title, isFavorite, isInWatchList, isAlreadyWatched} = film;
 
   description = (description.length >= 140) ?
     description.substring(0, 139) + `(...)`
     : description;
+
+  const filmDurationMinutes = filmDuration % 60;
+  const filmDurationHours = (filmDuration - filmDurationMinutes) / 60;
+  const filmDurationFormated = filmDurationHours + `h ` + filmDurationMinutes + `m`;
 
   const markFavorite = isFavorite ? `film-card__controls-item--active` : ``;
   const markInWatchList = isInWatchList ? `film-card__controls-item--active` : ``;
@@ -16,7 +20,7 @@ export const createFilmCardTemplate = (film) => {
     <p class="film-card__rating">${rating}</p>
     <p class="film-card__info">
       <span class="film-card__year">${year}</span>
-      <span class="film-card__duration">${duration}</span>
+      <span class="film-card__duration">${filmDurationFormated}</span>
       <span class="film-card__genre">${genre[0]}</span>
     </p>
     <img src=${poster} alt="" class="film-card__poster">
