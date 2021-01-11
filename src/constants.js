@@ -10,3 +10,15 @@ export const SortType = {
   HISTORY: `history`,
   FAVORITE: `favorite`,
 };
+
+export const UserAction = {
+  ADD_TO_FILTER_LIST: `ADD_TO_FILTER_LIST`,
+  ADD_COMMENT: `ADD_COMMENT`,
+  DELETE_COMMENT: `DELETE_COMMENT`,
+};
+
+export const UpdateType = {
+  PATCH: `PATCH`,
+  MINOR: `MINOR`,
+  MAJOR: `MAJOR`
+};

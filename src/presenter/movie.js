@@ -1,6 +1,7 @@
 import FilmCardView from '../view/film-card.js';
 import Popup from '../view/popup.js';
 import {render, renderPosition, remove, replace} from '../utils/render.js';
+import {UserAction, UpdateType} from '../constants.js';
 
 const popupClassName = `.film-details`;
 
@@ -106,14 +107,14 @@ export default class Movie {
   }
 
   _handleFavoriteClick(film) {
-    this._updateFilmComponent(Object.assign({}, film, {isFavorite: !film.isFavorite}));
+    this._updateFilmComponent(UserAction.ADD_TO_FILTER_LIST, UpdateType.MINOR, Object.assign({}, film, {isFavorite: !film.isFavorite}));
   }
 
   _handleToWatchlistClick(film) {
-    this._updateFilmComponent(Object.assign({}, film, {isInWatchList: !film.isInWatchList}));
+    this._updateFilmComponent(UserAction.ADD_TO_FILTER_LIST, UpdateType.MINOR, Object.assign({}, film, {isInWatchList: !film.isInWatchList}));
   }
 
   _handleAlreadyWatchedClick(film) {
-    this._updateFilmComponent(Object.assign({}, film, {isAlreadyWatched: !film.isAlreadyWatched}));
+    this._updateFilmComponent(UserAction.ADD_TO_FILTER_LIST, UpdateType.MINOR, Object.assign({}, film, {isAlreadyWatched: !film.isAlreadyWatched}));
   }
 }
